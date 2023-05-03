@@ -12,7 +12,12 @@
         "interface/ftdi/esp32_devkitj_v1.cfg",
         "target/esp32s3.cfg"
     ],
-    "idf.portWin": "COM1",
+    "idf.portWin": "COM4",
     "idf.pythonBinPathWin": "C:\\Users\\gratt\\.espressif\\python_env\\idf5.0_py3.8_env\\Scripts\\python.exe",
-    "idf.toolsPathWin": "C:\\Users\\gratt\\.espressif"
+    "idf.toolsPathWin": "C:\\Users\\gratt\\.espressif",
+    "files.associations": {
+        "string_view": "c",
+        "regex": "c"
+    },
+    "idf.flashType": "UART"
 }

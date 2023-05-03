@@ -30,8 +30,8 @@
 // Pins in use
 #define GPIO_MOSI 12
 #define GPIO_MISO 13
-#define GPIO_SCLK 15
-#define GPIO_CS 14
+#define GPIO_SCLK 14
+#define GPIO_CS 15
 
 // Main application
 void app_main(void)
@@ -51,28 +51,38 @@ void app_main(void)
         .command_bits = 0,
         .address_bits = 0,
         .dummy_bits = 0,
-        .clock_speed_hz = 20000000,//60 MHz
+        .clock_speed_hz = 10000000,//20 MHz
         .duty_cycle_pos = 128, // 50% duty cycle
         .mode = 0,
         .spics_io_num = GPIO_CS,
+        .input_delay_ns = 1,
+        .cs_ena_pretrans = 2,
         .cs_ena_posttrans = 3, // Keep the CS low 3 cycles after transaction
-        .queue_size = 3};
+        .queue_size = 1};
 
-    char sendbuf[128] = {0};
+
+
+
+    char recvbuf[129] = "";
+    memset(recvbuf, 0, 33);
+
+    char sendbuf[2] = {0};
 
     spi_transaction_t t;
     memset(&t, 0, sizeof(t));
-    spi_bus_initialize(SPI3_HOST, &buscfg, SPI_DMA_CH_AUTO);
-    spi_bus_add_device(SPI3_HOST, &devcfg, &handle);
+    spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
+    spi_bus_add_device(SPI2_HOST, &devcfg, &handle);
 
     printf("Master output:\n");
     while (1)
     {
-        snprintf(sendbuf, sizeof(sendbuf), "Allo ca fonctionne");
+        snprintf(sendbuf, sizeof(sendbuf), "U");
         t.length = sizeof(sendbuf) * 8;
+        t.rx_buffer = recvbuf;
         t.tx_buffer = sendbuf;
         spi_device_transmit(handle, &t);
         printf("Transmitted: %s\n", sendbuf);
+        printf("Received: %d\n", recvbuf[0]);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
