@@ -28,10 +28,10 @@
 #include "esp_intr_alloc.h"
 
 // Pins in use
-#define GPIO_MOSI 12
+#define GPIO_MOSI 11
 #define GPIO_MISO 13
-#define GPIO_SCLK 14
-#define GPIO_CS 15
+#define GPIO_SCLK 12
+#define GPIO_CS 10
 
 // Main application
 void app_main(void)
@@ -66,7 +66,7 @@ void app_main(void)
     char recvbuf[129] = "";
     memset(recvbuf, 0, 33);
 
-    char sendbuf[2] = {0};
+    char sendbuf[20] = {0};
 
     spi_transaction_t t;
     memset(&t, 0, sizeof(t));
@@ -76,7 +76,7 @@ void app_main(void)
     printf("Master output:\n");
     while (1)
     {
-        snprintf(sendbuf, sizeof(sendbuf), "U");
+        snprintf(sendbuf, sizeof(sendbuf), "Master bitch");
         t.length = sizeof(sendbuf) * 8;
         t.rx_buffer = recvbuf;
         t.tx_buffer = sendbuf;
