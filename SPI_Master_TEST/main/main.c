@@ -28,10 +28,10 @@
 #include "esp_intr_alloc.h"
 
 // Pins in use
-#define GPIO_MOSI 12
+#define GPIO_MOSI 11
 #define GPIO_MISO 13
-#define GPIO_SCLK 15
-#define GPIO_CS 14
+#define GPIO_SCLK 12
+#define GPIO_CS 10
 
 // Main application
 void app_main(void)
@@ -51,10 +51,12 @@ void app_main(void)
         .command_bits = 0,
         .address_bits = 0,
         .dummy_bits = 0,
-        .clock_speed_hz = 20000000,//60 MHz
+        .clock_speed_hz = 10000000,//60 MHz
         .duty_cycle_pos = 128, // 50% duty cycle
         .mode = 0,
         .spics_io_num = GPIO_CS,
+        .cs_ena_pretrans = 400,
+        .input_delay_ns = 100,
         .cs_ena_posttrans = 3, // Keep the CS low 3 cycles after transaction
         .queue_size = 3};
 
@@ -64,7 +66,7 @@ void app_main(void)
     memset(&t, 0, sizeof(t));
     spi_bus_initialize(SPI3_HOST, &buscfg, SPI_DMA_CH_AUTO);
     spi_bus_add_device(SPI3_HOST, &devcfg, &handle);
-
+int i = 0;
     printf("Master output:\n");
     while (1)
     {
